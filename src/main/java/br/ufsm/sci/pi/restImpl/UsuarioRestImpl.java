@@ -99,8 +99,6 @@ public class UsuarioRestImpl implements UsuarioRest {
         }
         return new ResponseEntity<UsuarioWrapper>(new UsuarioWrapper(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-
 }
 
 

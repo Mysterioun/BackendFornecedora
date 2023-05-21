@@ -88,7 +88,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setEmail(requestMap.get("email"));
         usuario.setSenha(requestMap.get("senha"));
         usuario.setStatus("true");
-        usuario.setRole("admin");
+        usuario.setRole("cliente");
         return usuario;
     }
 
@@ -187,8 +187,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         return new ResponseEntity<>(new UsuarioWrapper(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-
 }
 
 
