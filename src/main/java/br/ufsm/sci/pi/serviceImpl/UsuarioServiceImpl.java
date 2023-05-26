@@ -106,9 +106,6 @@ public class UsuarioServiceImpl implements UsuarioService {
                             jwtUtil.generateToken(customerUserDatailsService.getUserDatail().getEmail(),
                                     customerUserDatailsService.getUserDatail().getRole()) + "\"}",
                             HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<String>("{\"Mensagem\":\"" + "Espere pelo Admin aprovar." + "\"}",
-                            HttpStatus.BAD_REQUEST);
                 }
             }
 

@@ -17,6 +17,7 @@ import java.io.Serializable;
 @Table(name = "categoria")
 public class Categoria implements Serializable {
 
+    //essa variavel é usada para serializar a classe e enviar para o banco de dados
     private static final long serialVersionUID = 1L;
 
     @Id

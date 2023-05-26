@@ -2,7 +2,6 @@ package br.ufsm.sci.pi.wrapper;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 @Data
 @NoArgsConstructor
 public class UsuarioWrapper {
