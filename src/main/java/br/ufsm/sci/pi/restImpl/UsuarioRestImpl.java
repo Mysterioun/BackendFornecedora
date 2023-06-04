@@ -99,6 +99,16 @@ public class UsuarioRestImpl implements UsuarioRest {
         }
         return new ResponseEntity<UsuarioWrapper>(new UsuarioWrapper(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<UsuarioWrapper> getUsuarioLogado(String authorizationHeader) {
+        try{
+            return usuarioService.getUsuarioLogado(authorizationHeader);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<UsuarioWrapper>(new UsuarioWrapper(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
 
 

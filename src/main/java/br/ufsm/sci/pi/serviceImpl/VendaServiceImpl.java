@@ -52,7 +52,7 @@ public class VendaServiceImpl implements VendaService {
                 }else{
                     nomeArquivo = CafeUtils.getUUID();
                     requestMap.put("uuid", nomeArquivo);
-                    cadastrarConta(requestMap);
+                    cadastrarVenda(requestMap);
                 }
 
                 String data = "Nome: "+requestMap.get("nome") +"\n"+"Numero Contato: "+requestMap.get("numeroContato")+
@@ -154,7 +154,7 @@ public class VendaServiceImpl implements VendaService {
         document.add(rect);
     }
 
-    private void cadastrarConta(Map<String, Object> requestMap) {
+    private void cadastrarVenda(Map<String, Object> requestMap) {
         try {
             Venda venda = new Venda();
             venda.setUuid((String) requestMap.get("uuid"));
