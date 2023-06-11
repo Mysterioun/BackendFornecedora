@@ -32,4 +32,8 @@ public interface UsuarioRest {
 
     @GetMapping(path = "/getPeloId/{id}")
     ResponseEntity<UsuarioWrapper> getUsuarioPeloId (@PathVariable Integer id);
+
+    @GetMapping(path = "/getUsuarioLogado")
+    ResponseEntity<UsuarioWrapper> getUsuarioLogado(@RequestHeader("Authorization") String authorizationHeader);
+
 }

@@ -1,5 +1,6 @@
 package br.ufsm.sci.pi.JWT;
 
+import br.ufsm.sci.pi.model.Usuario;
 import io.jsonwebtoken.Claims;
 
 import io.jsonwebtoken.ExpiredJwtException;

@@ -13,8 +13,6 @@ import br.ufsm.sci.pi.service.VendaService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.io.IOUtils;
 import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONStringer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,17 +44,17 @@ public class VendaServiceImpl implements VendaService {
         System.out.println(requestMap);
         try {
             String nomeArquivo;
-            if(validarRequestMap(requestMap)){
-                if(requestMap.containsKey("isGenerate") && !(Boolean) requestMap.get("isGenerate")){
+            if (validarRequestMap(requestMap)) {
+                if (requestMap.containsKey("isGenerate") && !(Boolean) requestMap.get("isGenerate")) {
                     nomeArquivo = (String) requestMap.get("uuid");
-                }else{
+                } else {
                     nomeArquivo = CafeUtils.getUUID();
                     requestMap.put("uuid", nomeArquivo);
-                    cadastrarConta(requestMap);
+                    cadastrarVenda(requestMap);
                 }
 
-                String data = "Nome: "+requestMap.get("nome") +"\n"+"Numero Contato: "+requestMap.get("numeroContato")+
-                                "\n"+"Email: "+requestMap.get("email")+"\n"+"Metodo Pagamento: "+requestMap.get("metodoPagamento");
+                String data = "Nome: " + requestMap.get("nome") + "\n" + "Numero Contato: " + requestMap.get("numeroContato") +
+                        "\n" + "Email: " + requestMap.get("email") + "\n" + "Metodo Pagamento: " + requestMap.get("metodoPagamento");
 
                 Document document = new Document();
                 PdfWriter.getInstance(document, new FileOutputStream(CafeConstantes.PASTA_RAIZ + "\\" + nomeArquivo + ".pdf"));
@@ -64,11 +62,17 @@ public class VendaServiceImpl implements VendaService {
                 document.open();
                 setRetanguloPdf(document);
 
+                // Adicionar logo da universidade
+                Image logo = Image.getInstance(CafeConstantes.LOGO_UFSM);
+                logo.setAlignment(Element.ALIGN_CENTER);
+                logo.scaleToFit(550, 200); // Ajustar o tamanho da imagem conforme necessário
+                document.add(logo);
+
                 Paragraph chunk = new Paragraph("CaféSolutions", getFont("Header"));
                 chunk.setAlignment(Element.ALIGN_CENTER);
                 document.add(chunk);
 
-                Paragraph paragraph = new Paragraph(data+ "\n \n", getFont("Data"));
+                Paragraph paragraph = new Paragraph(data + "\n \n", getFont("Data"));
                 document.add(paragraph);
 
                 PdfPTable table = new PdfPTable(5);
@@ -77,33 +81,30 @@ public class VendaServiceImpl implements VendaService {
 
                 JSONArray jsonArray = CafeUtils.getJsonArrayFromString((String) requestMap.get("produtoDetalhes"));
 
-                for(int i = 0; i < jsonArray.length(); i++){
+                for (int i = 0; i < jsonArray.length(); i++) {
                     addRows(table, CafeUtils.getMapFromJson(jsonArray.getString(i)));
                 }
                 document.add(table);
 
-                Paragraph footer = new Paragraph("Total: "+requestMap.get("totalAmount")+"\n"
+                Paragraph footer = new Paragraph("Total: R$ " + requestMap.get("totalAmount") + "\n"
                         + "Obrigado por nos visitar. Volte novamente!!", getFont("Data"));
                 document.add(footer);
                 document.close();
                 return new ResponseEntity<>("{\"uuid\":\"" + nomeArquivo + "\"}", HttpStatus.OK);
             }
             return CafeUtils.getResponseEntity("Dados necessarios não encontrados", HttpStatus.BAD_REQUEST);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return CafeUtils.getResponseEntity(CafeConstantes.ALGO_DEU_ERRADO, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-
-
     private void addRows(PdfPTable table, Map<String, Object> data) {
         log.info("Dentro addRows");
         table.addCell((String) data.get("nome"));
         table.addCell((String) data.get("categoria"));
         table.addCell((String) data.get("quantidade"));
-        table.addCell(Double.toString((Double) data.get("preco")));
-        table.addCell(Double.toString((Double) data.get("total")));
+        table.addCell("R$ " + data.get("preco"));
+        table.addCell("R$ " + data.get("total"));
     }
 
     private void addTableHeader(PdfPTable table) {
@@ -154,7 +155,7 @@ public class VendaServiceImpl implements VendaService {
         document.add(rect);
     }
 
-    private void cadastrarConta(Map<String, Object> requestMap) {
+    private void cadastrarVenda(Map<String, Object> requestMap) {
         try {
             Venda venda = new Venda();
             venda.setUuid((String) requestMap.get("uuid"));

@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -106,9 +107,6 @@ public class UsuarioServiceImpl implements UsuarioService {
                             jwtUtil.generateToken(customerUserDatailsService.getUserDatail().getEmail(),
                                     customerUserDatailsService.getUserDatail().getRole()) + "\"}",
                             HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<String>("{\"Mensagem\":\"" + "Espere pelo Admin aprovar." + "\"}",
-                            HttpStatus.BAD_REQUEST);
                 }
             }
 
@@ -165,18 +163,22 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public ResponseEntity<String> esqueceuSenha(Map<String, String> requestMap) {
         try {
-            Usuario usuario = usuarioDao.findByEmail(requestMap.get("email"));
-            if (!Objects.isNull(usuario) && !Strings.isNullOrEmpty(usuario.getEmail()))
+            String email = requestMap.get("email");
+            Usuario usuario = usuarioDao.findByEmail(email);
 
+            if (usuario != null && !usuario.getEmail().isEmpty()) {
                 emailUtils.esqueceuEmail(usuario.getEmail(), "Dados do Cliente", usuario.getSenha());
-            return CafeUtils.getResponseEntity("Verifique seu email para receber os dados de login", HttpStatus.OK);
-
+                return CafeUtils.getResponseEntity("Verifique seu email para receber os dados de login", HttpStatus.OK);
+            } else {
+                return CafeUtils.getResponseEntity("E-mail não encontrado", HttpStatus.BAD_REQUEST);
+            }
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return CafeUtils.getResponseEntity(CafeConstantes.ALGO_DEU_ERRADO, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 
     @Override
     public ResponseEntity<UsuarioWrapper> getUsuarioPeloId(Integer id) {
@@ -187,6 +189,24 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         return new ResponseEntity<>(new UsuarioWrapper(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<UsuarioWrapper> getUsuarioLogado(String authorizationHeader) {
+
+        try {
+            if (jwtFilter.isAdmin() || jwtFilter.isCliente()) {
+                return new ResponseEntity<>(usuarioDao.obterUsuarioPeloId(customerUserDatailsService.getUserDatail().getId()), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new UsuarioWrapper(), HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<>(new UsuarioWrapper(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+
+
 }
 
 

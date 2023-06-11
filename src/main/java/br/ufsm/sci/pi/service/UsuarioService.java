@@ -22,4 +22,6 @@ public interface UsuarioService {
 
     ResponseEntity<UsuarioWrapper> getUsuarioPeloId(Integer id);
 
+    ResponseEntity<UsuarioWrapper> getUsuarioLogado(String authorizationHeader);
+
 }
