@@ -46,6 +46,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     EmailUtils emailUtils;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public ResponseEntity<String> cadastrar(Map<String, String> requestMap) {
         log.info("Dentro cadastro {}", requestMap);
@@ -55,12 +58,16 @@ public class UsuarioServiceImpl implements UsuarioService {
 
                 Usuario usuario = usuarioDao.findByEmailId(requestMap.get("email"));
                 if (Objects.isNull(usuario)) {
+                    String senhaCriptografada = passwordEncoder.encode(requestMap.get("senha"));
 
-                    usuarioDao.save(getUsuarioFromMap(requestMap));
+                    Usuario novoUsuario = getUsuarioFromMap(requestMap);
+                    novoUsuario.setSenha(senhaCriptografada);
+
+                    usuarioDao.save(novoUsuario);
                     return CafeUtils.getResponseEntity("Cadastrado com Sucesso.", HttpStatus.OK);
 
                 } else {
-                    return CafeUtils.getResponseEntity("Email ja existe.", HttpStatus.BAD_REQUEST);
+                    return CafeUtils.getResponseEntity("Email já existe.", HttpStatus.BAD_REQUEST);
                 }
 
             } else {
