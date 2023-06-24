@@ -1,4 +1,4 @@
-package br.ufsm.sci.pi.restImpl;
+package br.ufsm.sci.pi.rest.restImpl;
 
 import br.ufsm.sci.pi.rest.UsuarioRest;
 import br.ufsm.sci.pi.service.UsuarioService;
@@ -94,6 +94,16 @@ public class UsuarioRestImpl implements UsuarioRest {
     public ResponseEntity<UsuarioWrapper> getUsuarioPeloId(Integer id) {
         try {
             return usuarioService.getUsuarioPeloId(id);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<UsuarioWrapper>(new UsuarioWrapper(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<UsuarioWrapper> getUsuarioLogado(String authorizationHeader) {
+        try{
+            return usuarioService.getUsuarioLogado(authorizationHeader);
         }catch (Exception ex){
             ex.printStackTrace();
         }

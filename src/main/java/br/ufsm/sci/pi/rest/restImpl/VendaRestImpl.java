@@ -1,4 +1,4 @@
-package br.ufsm.sci.pi.restImpl;
+package br.ufsm.sci.pi.rest.restImpl;
 
 import br.ufsm.sci.pi.constantes.CafeConstantes;
 import br.ufsm.sci.pi.model.Venda;

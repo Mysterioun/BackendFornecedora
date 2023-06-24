@@ -1,4 +1,4 @@
-package br.ufsm.sci.pi.serviceImpl;
+package br.ufsm.sci.pi.service.serviceImpl;
 
 import br.ufsm.sci.pi.JWT.JwtFilter;
 import br.ufsm.sci.pi.dao.CategoriaDao;
@@ -136,9 +136,7 @@ public class CategoriaServiceImpl implements CategoriaService {
         }
         catch (Exception ex) {
             ex.printStackTrace();
-            return CafeUtils.getResponseEntity(CafeConstantes.ALGO_DEU_ERRADO, HttpStatus.INTERNAL_SERVER_ERROR);
-
         }
-        return CafeUtils.getResponseEntity(CafeConstantes.ALGO_DEU_ERRADO, HttpStatus.INTERNAL_SERVER_ERROR);
+        return CafeUtils.getResponseEntity("Categoria não pode ser excluida pois está sendo usada em um produto", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

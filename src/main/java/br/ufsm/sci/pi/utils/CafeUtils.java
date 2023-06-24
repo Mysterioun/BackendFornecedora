@@ -25,7 +25,7 @@ public class CafeUtils {
     }
 
     public static ResponseEntity<String> getResponseEntity(String responseMessage, HttpStatus httpStatus){
-        return new ResponseEntity<String>("{\"Mensagem\"" + responseMessage + "\"}", httpStatus);
+        return new ResponseEntity<String>("{\"Mensagem\":\""+responseMessage+"\"}", httpStatus);
     }
 
     public static String getUUID(){
@@ -50,15 +50,14 @@ public class CafeUtils {
 
     }
 
-    public static Boolean arquivoJaExiste(String path){
+    public static Boolean arquivoJaExiste(String path) {
         log.info("Dentro do arquivoJaExiste {}", path);
         try {
             File file = new File(path);
             return (file != null && file.exists()) ? Boolean.TRUE : Boolean.FALSE;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return false;
     }
-
 }

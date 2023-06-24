@@ -9,6 +9,9 @@ public class CafeConstantes {
 
     public static final String ACESSO_NAO_AUTORIZADO = "Acesso não Autorizado.";
 
-    public static final String PASTA_RAIZ = "..\\BackendFornecedora\\src\\main\\resources\\arquivos";
+    public static final String PASTA_RAIZ = "..\\BackendFornecedora\\src\\main\\resources\\arquivos\\PDF";
+
+    public static final String LOGO_UFSM = "..\\BackendFornecedora\\src\\main\\resources\\arquivos\\img\\poli.jpeg";
+
 
 }

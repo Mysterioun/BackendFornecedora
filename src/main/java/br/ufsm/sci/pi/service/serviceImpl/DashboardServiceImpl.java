@@ -1,4 +1,4 @@
-package br.ufsm.sci.pi.serviceImpl;
+package br.ufsm.sci.pi.service.serviceImpl;
 
 import br.ufsm.sci.pi.dao.CategoriaDao;
 import br.ufsm.sci.pi.dao.ProdutoDao;
